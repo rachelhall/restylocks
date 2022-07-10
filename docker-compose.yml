@@ -7,7 +7,7 @@ services:
       args:
         - DEV=true
     ports: 
-    - "8000:8000"
+      - "8000:8000"
     volumes:
       - ./app:/app
     command: >
@@ -15,7 +15,7 @@ services:
              python manage.py migrate &&configs:
              python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=db- DB_NAME=devdb
+      - DB_HOST=db 
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=changeme
