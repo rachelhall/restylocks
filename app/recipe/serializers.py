@@ -7,7 +7,16 @@ from rest_framework import serializers
 from core.models import (
     Recipe,
     Tag,
+    Ingredient
 )
+
+
+class IngredientSerializer(serializers.ModelSerializer):
+    """Serializer for ingredients."""
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'name']
+        read_only_fields = ['id']
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -36,6 +45,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 user=auth_user,
                 **tag,
             )
+            recipe.tags.add(tag_obj)
 
     def create(self, validated_data):
         """Create a recipe."""
