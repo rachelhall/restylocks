@@ -6,8 +6,8 @@ services:
       context: .
       args:
         - DEV=true
-    ports: 
-      - "8000:8000"
+    ports:
+      - "80:8000"
     volumes:
       - ./app:/app
       - dev-static-data:/vol/web
@@ -28,12 +28,11 @@ services:
     image: postgres:13-alpine
     volumes:
       - dev-db-data:/var/lib/postgresql/data
-     
+
     environment:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
-
 
 volumes:
   dev-db-data:
