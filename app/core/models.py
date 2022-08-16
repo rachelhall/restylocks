@@ -86,6 +86,10 @@ class Recipe(models.Model):
 
 class Park(models.Model):
     """Skate park object."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=255)
     street_number = models.IntegerField(null=True)
     street_name = models.CharField(blank=True, max_length=255)
@@ -95,14 +99,8 @@ class Park(models.Model):
     postal_code = models.IntegerField(null=True)
     country = models.CharField(max_length=255, default='United States')
     description = models.TextField(blank=True)
-
     image = models.ImageField(
-        null=True, upload_to=recipe_image_file_path)
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
+        null=True, upload_to=park_image_file_path)
 
     def __str__(self):
         return self.name

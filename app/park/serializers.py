@@ -39,3 +39,12 @@ class ParkDetailSerializer(ParkSerializer):
 
     class Meta(ParkSerializer.Meta):
         fields = ParkSerializer.Meta.fields + ['description']
+
+
+class ParkImageSerializer(serializers.ModelSerializer):
+    """Serializer for uploading image to parks."""
+
+    class Meta:
+        model = Park
+        fields = ['id', 'image']
+        read_only_fields = ['id']
