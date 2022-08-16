@@ -23,7 +23,8 @@ class ParkSerializer(serializers.ModelSerializer):
             'state',
             'postal_code',
             'country',
-            'description'
+            'description',
+            'image'
         ]
         read_only_fields = ['id']
 
