@@ -33,12 +33,20 @@ class ParkSerializer(serializers.ModelSerializer):
 
         return park
 
+    def update(self, instance, validated_data):
+        """Update park."""
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
 
 class ParkDetailSerializer(ParkSerializer):
     """Serializer for park detail view."""
 
     class Meta(ParkSerializer.Meta):
-        fields = ParkSerializer.Meta.fields + ['description']
+        fields = ParkSerializer.Meta.fields + ['description', 'image']
 
 
 class ParkImageSerializer(serializers.ModelSerializer):
