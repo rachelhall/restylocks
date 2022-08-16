@@ -21,6 +21,14 @@ def recipe_image_file_path(instance, filename):
     return os.path.join('uploads', 'recipe', filename)
 
 
+def park_image_file_path(instance, filename):
+    """Generate file path for new park image."""
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()()}{ext}'
+
+    return os.path.join('uploads', 'park', filename)
+
+
 class UserManager(BaseUserManager):
     """Manager for users."""
 
@@ -79,9 +87,18 @@ class Recipe(models.Model):
 class Park(models.Model):
     """Skate park object."""
     name = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    state = models.CharField(max_length=255)
+    street_number = models.IntegerField(null=True)
+    street_name = models.CharField(blank=True, max_length=255)
+    street_suffix = models.CharField(blank=True, max_length=255)
+    city = models.CharField(blank=True, max_length=255)
+    state = models.CharField(blank=True, max_length=255)
+    postal_code = models.IntegerField(null=True)
+    country = models.CharField(max_length=255, default='United States')
     description = models.TextField(blank=True)
+
+    image = models.ImageField(
+        null=True, upload_to=recipe_image_file_path)
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE

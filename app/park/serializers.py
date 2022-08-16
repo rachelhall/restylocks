@@ -17,8 +17,12 @@ class ParkSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
+            'street_number',
+            'street_name',
             'city',
             'state',
+            'postal_code',
+            'country',
             'description'
         ]
         read_only_fields = ['id']

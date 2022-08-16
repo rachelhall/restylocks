@@ -99,8 +99,11 @@ class ModelTests(TestCase):
         park = models.Park.objects.create(
             user=user,
             name='Sample park',
+            street_number=124,
+            street_name='Covington',
             city='San Diego',
             state='California',
+            country='United States',
             description='Really cool park'
         )
 
