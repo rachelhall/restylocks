@@ -5,8 +5,17 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from rest_framework import status
 from rest_framework.test import APIClient
 from rest_framework import status
+from core.models import (
+    Post,
+    Park,
+)
+
+from user.serializers import (
+    UserSerializer,
+)
 
 
 CREATE_USER_URL = reverse('user:create')
@@ -17,6 +26,31 @@ ME_URL = reverse('user:me')
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
+
+
+def create_post(user, **params):
+    """Create and return a sample post"""
+
+    park = Park.objects.create(
+        user=user,
+        name='Sample park',
+        street_number=124,
+        street_name='Covington',
+        city='San Diego',
+        state='California',
+        country='United States',
+        description='Really cool park'
+    )
+
+    defaults = {
+        'title': 'Sample post title',
+        'park': park,
+        'description': 'A very nice post',
+    }
+    defaults.update(params)
+
+    post = Post.objects.create(user=user, **defaults)
+    return post
 
 
 class PublicUserApiTests(TestCase):

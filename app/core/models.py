@@ -29,6 +29,14 @@ def park_image_file_path(instance, filename):
     return os.path.join('uploads', 'park', filename)
 
 
+def post_image_file_path(instance, filename):
+    """Generate file path for new park image."""
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
+
+    return os.path.join('uploads', 'post', filename)
+
+
 class UserManager(BaseUserManager):
     """Manager for users."""
 
@@ -64,26 +72,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 
-class Recipe(models.Model):
-    """Recipe object."""
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    time_minutes = models.IntegerField()
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    link = models.CharField(max_length=255, blank=True)
-    tags = models.ManyToManyField('Tag')
-    ingredients = models.ManyToManyField('Ingredient')
-    image = models.ImageField(
-        null=True, upload_to=recipe_image_file_path)
-
-    def __str__(self):
-        return self.title
-
-
 class Park(models.Model):
     """Skate park object."""
     user = models.ForeignKey(
@@ -104,6 +92,42 @@ class Park(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Post(models.Model):
+    """Post object."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    park = models.ForeignKey(Park, on_delete=models.CASCADE, null=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(
+        null=True, upload_to=post_image_file_path)
+
+    def __str__(self):
+        return self.title
+
+
+class Recipe(models.Model):
+    """Recipe object."""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    link = models.CharField(max_length=255, blank=True)
+    tags = models.ManyToManyField('Tag')
+    ingredients = models.ManyToManyField('Ingredient')
+    image = models.ImageField(
+        null=True, upload_to=recipe_image_file_path)
+
+    def __str__(self):
+        return self.title
 
 
 class Tag(models.Model):

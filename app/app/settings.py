@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'user',
     'recipe',
     'park',
+    'post',
 ]
 
 MIDDLEWARE = [

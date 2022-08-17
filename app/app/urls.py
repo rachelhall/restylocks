@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/user/', include('user.urls')),
     path('api/recipe/', include('recipe.urls')),
     path('api/park/', include('park.urls')),
+    path('api/post/', include('post.urls')),
 ]
 
 if settings.DEBUG:

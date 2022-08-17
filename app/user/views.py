@@ -6,10 +6,13 @@ from rest_framework import generics, authentication, permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 
+
 from user.serializers import (
     UserSerializer,
     AuthTokenSerializer,
 )
+
+from core.models import User
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -26,6 +29,7 @@ class CreateTokenView(ObtainAuthToken):
 class ManageUserView(generics.RetrieveUpdateAPIView):
     """Manage the authenticated user."""
     serializer_class = UserSerializer
+    queryset = User.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 

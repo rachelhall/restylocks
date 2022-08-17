@@ -117,3 +117,28 @@ class ModelTests(TestCase):
         file_path = models.recipe_image_file_path(None, 'example.jpg')
 
         self.assertEqual(file_path, f'uploads/recipe/{uuid}.jpg')
+
+    def test_create_post(self):
+        """Test creating a post is successful."""
+        user = get_user_model().objects.create_user(
+            'test@example.com',
+            'testpass123'
+        )
+        park = models.Park.objects.create(
+            user=user,
+            name='Sample park',
+            street_number=124,
+            street_name='Covington',
+            city='San Diego',
+            state='California',
+            country='United States',
+            description='Really cool park'
+        )
+        post = models.Post.objects.create(
+            user=user,
+            title='Collosal Bail',
+            park=park,
+            description='sample description',
+        )
+
+        self.assertEqual(str(post), post.title)
