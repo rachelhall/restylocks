@@ -17,9 +17,10 @@ class PostSerializer(serializers.ModelSerializer):
             'user',
             'title',
             'description',
-            'park'
+            'park',
+            'image',
         ]
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'user']
 
     def create(self, validated_data):
         """Create a post."""
