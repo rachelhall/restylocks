@@ -73,10 +73,13 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'core',
-    'user',
+    'user.apps.UserConfig',
+    'account',
     'recipe',
     'park',
     'post',
+
+
 ]
 
 MIDDLEWARE = [

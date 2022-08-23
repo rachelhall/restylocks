@@ -47,7 +47,7 @@ class ParkDetailSerializer(ParkSerializer):
     """Serializer for park detail view."""
 
     class Meta(ParkSerializer.Meta):
-        fields = ParkSerializer.Meta.fields + ['description', 'image']
+        fields = ParkSerializer.Meta.fields
 
 
 class ParkImageSerializer(serializers.ModelSerializer):
@@ -57,3 +57,4 @@ class ParkImageSerializer(serializers.ModelSerializer):
         model = Park
         fields = ['id', 'image']
         read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': True}}

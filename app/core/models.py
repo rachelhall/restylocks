@@ -37,6 +37,14 @@ def post_image_file_path(instance, filename):
     return os.path.join('uploads', 'post', filename)
 
 
+def account_image_file_path(instance, filename):
+    """Generate file path for new account image."""
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
+
+    return os.path.join('uploads', 'account', filename)
+
+
 class UserManager(BaseUserManager):
     """Manager for users."""
 
@@ -70,6 +78,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class Account(models.Model):
+    """Profile information for user."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    pronouns = models.CharField(max_length=30, blank=True)
+    avatar = models.ImageField(
+        null=True,
+        upload_to=account_image_file_path
+    )
+    bio = models.TextField(max_length=255)
+
+    def __string__(self):
+        return f'{self.user.name} Account'
 
 
 class Park(models.Model):
