@@ -9,13 +9,8 @@ from core.models import (User, Account)
 def create_account(sender, instance, created, **kwargs):
     print('create account running')
     if created:
-        # Account.objects.create(user=instance)
         user_account = Account(user=instance)
         user_account.save()
+        user_account.name = instance.name
         user_account.friends.add(instance.account)
         user_account.save()
-
-
-# @receiver(post_save, sender=User)
-# def save_account(sender, instance, **kwargs):
-#     instance.account.save()
