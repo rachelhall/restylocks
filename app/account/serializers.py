@@ -6,7 +6,9 @@ from rest_framework import serializers
 
 
 from core.models import (
-    Account
+    Account,
+    FriendRequest,
+    Feed
 )
 
 
@@ -16,15 +18,19 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = [
+            'id',
             'user',
             'name',
             'pronouns',
             'avatar',
-            'bio'
+            'bio',
+            'friends',
         ]
+        read_only_fields = ['id']
 
     def create(self, validated_data):
         """Create an account."""
+        friends = validated_data.pop('friends', [])
         account = Account.objects.create(**validated_data)
 
         return account
@@ -53,3 +59,19 @@ class AccountImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'avatar']
         read_only_fields = ['id']
         extra_kwargs = {'image': {'required': True}}
+
+
+class FriendSerializer(serializers.ModelSerializer):
+    """Serializer for adding and removing friends."""
+
+    class Meta:
+        model = Account
+        fields = ['friends']
+
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    """Serializer for sending friend request."""
+
+    class Meta:
+        model = FriendRequest
+        fields = ['to_user', 'from_user', 'created_at']

@@ -12,6 +12,8 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
+from autoslug import AutoSlugField
+
 
 def recipe_image_file_path(instance, filename):
     """Generate file path for new recipe image."""
@@ -90,9 +92,31 @@ class Account(models.Model):
         upload_to=account_image_file_path
     )
     bio = models.TextField(max_length=255)
+    friends = models.ManyToManyField("Account", blank=True)
 
     def __string__(self):
         return f'{self.user.name} Account'
+
+
+class FriendRequest(models.Model):
+    """Information about an accounts friend requests"""
+    to_user = models.ForeignKey(
+        User, related_name='to_user', on_delete=models.CASCADE
+    )
+    from_user = models.ForeignKey(
+        User, related_name='from_user', on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "From {}, to {}".format((self.from_user.username, self.to_user.username))
+
+
+class Feed(models.Model):
+    """Account feed."""
+
+    def __string__(self):
+        return 'Feed'
 
 
 class Park(models.Model):

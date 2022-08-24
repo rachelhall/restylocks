@@ -24,9 +24,9 @@ class ParkViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        """Retrieve parks for authenticated user."""
-        return self.queryset.filter(user=self.request.user).order_by('-id')
+    # def get_queryset(self):
+    #     """Retrieve parks for authenticated user."""
+    #     return self.queryset.filter(user=self.request.user).order_by('-id')
 
     def get_serializer_class(self):
         """Return the serializer class for request."""

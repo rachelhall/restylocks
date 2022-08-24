@@ -6,4 +6,5 @@ class UserConfig(AppConfig):
     name = 'user'
 
     def ready(self):
+        print('signals running')
         import user.signals
