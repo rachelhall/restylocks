@@ -11,6 +11,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.utils import timezone
 
 from autoslug import AutoSlugField
 
@@ -82,22 +83,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 
-class Account(models.Model):
-    """Profile information for user."""
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    pronouns = models.CharField(max_length=30, blank=True)
-    avatar = models.ImageField(
-        null=True,
-        upload_to=account_image_file_path
-    )
-    bio = models.TextField(max_length=255)
-    friends = models.ManyToManyField("Account", blank=True)
-
-    def __string__(self):
-        return f'{self.user.name} Account'
-
-
 class FriendRequest(models.Model):
     """Information about an accounts friend requests"""
     to_user = models.ForeignKey(
@@ -110,6 +95,34 @@ class FriendRequest(models.Model):
 
     def __str__(self):
         return "From {}, to {}".format((self.from_user.username, self.to_user.username))
+
+
+class Account(models.Model):
+    """Profile information for user."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    pronouns = models.CharField(max_length=30, blank=True)
+    avatar = models.ImageField(
+        null=True,
+        upload_to=account_image_file_path
+    )
+    bio = models.TextField(max_length=255)
+    friends = models.ManyToManyField('Friend')
+
+    def __string__(self):
+        return f'{self.user.name} Account'
+
+
+class Friend(models.Model):
+    """Friend class"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.name
 
 
 class Feed(models.Model):
@@ -152,9 +165,25 @@ class Post(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(
         null=True, upload_to=post_image_file_path)
+    tags = models.ManyToManyField('Tag')
 
     def __str__(self):
         return self.title
+
+
+class Comments(models.Model):
+    """Comment object."""
+    post = models.ForeignKey(
+        Post, related_name='details', on_delete=models.CASCADE, null=True)
+    park = models.ForeignKey(Park, related_name='details',
+                             on_delete=models.CASCADE, null=True)
+    username = models.ForeignKey(
+        User, related_name='details', on_delete=models.CASCADE)
+    comment = models.CharField(max_length=255)
+    comment_date = models.DateTimeField(default=timezone.now)
+
+    def __str___(self):
+        return self.comment
 
 
 class Recipe(models.Model):
