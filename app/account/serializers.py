@@ -84,7 +84,7 @@ class AccountDetailSerializer(AccountSerializer):
     """Serializer for account detail view."""
 
     class Meta(AccountSerializer.Meta):
-        fields = AccountSerializer.Meta.fields + ['description', 'image']
+        fields = AccountSerializer.Meta.fields + ['name', 'avatar']
 
 
 class AccountImageSerializer(serializers.ModelSerializer):
