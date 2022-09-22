@@ -15,8 +15,11 @@ router = DefaultRouter()
 router.register('accounts', views.AccountViewSet)
 router.register('friends', views.FriendViewSet)
 
+
 app_name = 'account'
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+
+
 ]

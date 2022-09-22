@@ -15,6 +15,12 @@ from rest_framework import (
     status,
 )
 
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework.filters import SearchFilter
+
+from utils.MultipleFieldLookupMixin import MultipleFieldLookupMixin
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
@@ -50,10 +56,13 @@ from account import serializers
 )
 class AccountViewSet(viewsets.ModelViewSet):
     """View for managing account APIs."""
+
     serializer_class = serializers.AccountDetailSerializer
     queryset = Account.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user']
 
     def _params_to_ints(self, qs):
         """Convert a list of strings to integers."""
@@ -91,7 +100,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             OpenApiParameter(
                 'assigned_only',
                 OpenApiTypes.INT, enum=[0, 1],
-                description='Filter by friends assigned to account.',
+                description='Filter by currently logged in user.',
             )
         ]
     )

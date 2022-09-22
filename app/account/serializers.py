@@ -1,4 +1,4 @@
-""" 
+"""
 Serializers for account APIs.
 """
 
@@ -11,6 +11,8 @@ from core.models import (
     Friend,
     FriendRequest,
 )
+
+from utils.MultipleFieldLookupMixin import MultipleFieldLookupMixin
 
 
 class FriendSerializer(serializers.ModelSerializer):
@@ -30,7 +32,7 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         fields = ['to_user', 'from_user', 'created_at']
 
 
-class AccountSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer, MultipleFieldLookupMixin):
     """Serializer for account."""
 
     friends = FriendSerializer(many=True, required=False)
@@ -84,7 +86,8 @@ class AccountDetailSerializer(AccountSerializer):
     """Serializer for account detail view."""
 
     class Meta(AccountSerializer.Meta):
-        fields = AccountSerializer.Meta.fields + ['name', 'avatar']
+        fields = AccountSerializer.Meta.fields + ['name', 'user', 'avatar']
+        read_only_fields = ['id', 'user']
 
 
 class AccountImageSerializer(serializers.ModelSerializer):
@@ -93,5 +96,5 @@ class AccountImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['id', 'avatar']
-        read_only_fields = ['id']
+        read_only_fields = ['id', ]
         extra_kwargs = {'image': {'required': True}}
