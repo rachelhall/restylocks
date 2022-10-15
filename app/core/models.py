@@ -160,6 +160,7 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+    account = models.ForeignKey(Account, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
     park = models.ForeignKey(Park, on_delete=models.CASCADE, null=True)
     description = models.TextField(blank=True)

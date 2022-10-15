@@ -29,6 +29,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'user',
+            'account',
             'title',
             'description',
             'park',
