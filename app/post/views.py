@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from core.models import Post
 from post import serializers
@@ -21,10 +23,12 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['account']
 
-    def get_queryset(self):
-        """Retrieve posts for authenticated user."""
-        return self.queryset.filter(user=self.request.user).order_by('-id')
+    # def get_queryset(self):
+    #     """Retrieve posts for authenticated user."""
+    #     return self.queryset.filter(user=self.request.user).order_by('-id')
 
     def get_serializer_class(self):
         """Return the serializer for the request."""

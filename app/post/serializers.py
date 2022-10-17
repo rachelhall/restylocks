@@ -36,7 +36,7 @@ class PostSerializer(serializers.ModelSerializer):
             'image',
             'tags'
         ]
-        read_only_fields = ['id', 'user']
+        read_only_fields = ['id', 'user', 'account']
 
     def _get_or_create_tags(self, tags, post):
         """Handle getting or creating tags as needed."""
@@ -52,6 +52,7 @@ class PostSerializer(serializers.ModelSerializer):
         """Create a post."""
         tags = validated_data.pop('tags', [])
         post = Post.objects.create(**validated_data)
+        account = self.account.id
         self._get_or_create_tags(tags, post)
 
         return post
@@ -74,7 +75,8 @@ class PostDetailSerializer(PostSerializer):
     """Serializer for post detail view."""
 
     class Meta(PostSerializer.Meta):
-        fields = PostSerializer.Meta.fields + ['description', 'image']
+        fields = PostSerializer.Meta.fields + \
+            ['account', 'description', 'image']
 
 
 class PostImageSerializer(serializers.ModelSerializer):
